@@ -78,15 +78,17 @@ fetch("http://localhost:5678/api/works")
 document.querySelector(".filtres").addEventListener("click", (e) => {
     if (e.target.tagName === "BUTTON") {
         let categoryId = parseInt(e.target.id);
+
+        // Mise à jour de l'état actif du bouton
         document.querySelectorAll(".filtres button").forEach(btn => {
             btn.classList.remove("active")
         })
         e.target.classList.add("active");
 
-        // Filtrage des boutons
+        // Filtrage des projets selon la catégorie sélectionnée
 
         if (categoryId === 0) {
-            displayworks(works);
+            displayworks(works); // Tous les projets
         }
         else {
             let Fworks = works.filter(work => work.categoryId === categoryId);
@@ -115,13 +117,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Si le token existe => connexion admine
     if (token) {
-        // on affiche la barre, la modale et on masque les filtres 
+        // Mode admin
         editbar.style.display = "flex";        
         edittitreIcon.style.display = "inline-block";        
         SupFiltres.style.display = "none";
         LogLink.textContent ="Logout";
     } else {
-        // sinon la barre et la modale on ne les affiche pas et on affiche les filtres 
+        // Mode visiteur
         editbar.style.display = "none";
         edittitreIcon.style.display = "none";
         SupFiltres.style.display = "flex"
@@ -154,9 +156,8 @@ edittitreIcon.addEventListener("click", () =>{
     document.querySelector(".Photos").innerHTML= ModalPhotos;
 })
 
-// au clique sur la croix 
+// Fermeture de la modale
 btnFermer.addEventListener("click", () =>{
-    // on masque la modal 
     modal.style.display = "none";
 })
 
@@ -226,10 +227,8 @@ input.addEventListener("change", ({ target }) => {
   lab.style.display ="none"
   ic.style.display = "none"
   para.style.display = "none"
-  ajBox.style.padding = "0px"  
-
-  // a l'ajout de la photo le bouton valider deviens vert 
-  Sb.style.backgroundColor = "#1D6154"
+  ajBox.style.padding = "0px"   
+  Sb.style.backgroundColor = "#1D6154" // Active le bouton
 
   ajBox.appendChild(img);
 
@@ -329,7 +328,9 @@ document.querySelector(".submit-btn").addEventListener("click", (e) => {
     displayworks(works);
     displayModalWorks(works)
     resetModalForm();
-// on revient a la page des photos 
+
+// Revenir à l’affichage photo    
+    
 Aphotos.style.display = "grid";
 AjModal.style.display = "none";
 Flesh.style.visibility = "hidden";
