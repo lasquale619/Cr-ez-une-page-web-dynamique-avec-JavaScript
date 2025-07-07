@@ -3,58 +3,58 @@
  *************************************************************/
 
 fetch("http://localhost:5678/api/works")
-    .then(reponse => reponse.json())
-    .then(data => {
-        let figures = ""
-        for (let figure of data) {
+  .then(reponse => reponse.json())
+  .then(data => {
+    let figures = ""
+    for (let figure of data) {
 
-            // ajout à la galerie les travaux de l’architecte
+      // ajout à la galerie les travaux de l’architecte
 
-            figures += `
+      figures += `
             <figure>
 				<img src="${figure.imageUrl}" alt="${figure.title}">
 				<figcaption>${figure.title}</figcaption>
 			</figure>
             `
-        }
-        
-        document.querySelector(".gallery").innerHTML = figures
-    })
-    .catch(erreur => console.log(erreur))
+    }
+
+    document.querySelector(".gallery").innerHTML = figures
+  })
+  .catch(erreur => console.log(erreur))
 
 /*************************************************************
  * 2. Récupération des catégories et affichage des boutons
  *************************************************************/
 
 fetch("http://localhost:5678/api/categories")
-    .then(reponse => reponse.json())
-    .then(data => {
+  .then(reponse => reponse.json())
+  .then(data => {
 
-        // ajout des boutons categories depuis l'API
+    // ajout des boutons categories depuis l'API
 
-        let categories = ""
-        for (let cat of data) {
-            categories += `<button id="${cat.id}">${cat.name}</button>`
-        }
-        
-        document.querySelector(".filtres").insertAdjacentHTML("beforeend", categories);
-    })
+    let categories = ""
+    for (let cat of data) {
+      categories += `<button id="${cat.id}">${cat.name}</button>`
+    }
+
+    document.querySelector(".filtres").insertAdjacentHTML("beforeend", categories);
+  })
 
 /*************************************************************
  * 3. Fonction pour afficher dynamiquement les projets
  *************************************************************/
 
 function displayworks(works) {
-    let figures = ""
-    for (let figure of works) {
-        figures += `
+  let figures = ""
+  for (let figure of works) {
+    figures += `
         <figure>
 			<img src="${figure.imageUrl}" alt="${figure.title}">
 			<figcaption>${figure.title}</figcaption>
 		</figure>
         `
-    }
-    document.querySelector(".gallery").innerHTML = figures
+  }
+  document.querySelector(".gallery").innerHTML = figures
 }
 
 /*************************************************************
@@ -63,12 +63,12 @@ function displayworks(works) {
 
 let works = [];
 fetch("http://localhost:5678/api/works")
-    .then(reponse => reponse.json())
-    .then(data => {
-        works = data; // stockage des donneés 
-        displayworks(works); // on appelle la fonction pour affiché tout les travaux 
-    })
-    .catch(erreur => console.log(erreur));
+  .then(reponse => reponse.json())
+  .then(data => {
+    works = data; // stockage des donneés 
+    displayworks(works); // on appelle la fonction pour affiché tout les travaux 
+  })
+  .catch(erreur => console.log(erreur));
 
 
 /*************************************************************
@@ -76,26 +76,26 @@ fetch("http://localhost:5678/api/works")
  *************************************************************/
 
 document.querySelector(".filtres").addEventListener("click", (e) => {
-    if (e.target.tagName === "BUTTON") {
-        let categoryId = parseInt(e.target.id);
+  if (e.target.tagName === "BUTTON") {
+    let categoryId = parseInt(e.target.id);
 
-        // Mise à jour de l'état actif du bouton
-        document.querySelectorAll(".filtres button").forEach(btn => {
-            btn.classList.remove("active")
-        })
-        e.target.classList.add("active");
+    // Mise à jour de l'état actif du bouton
+    document.querySelectorAll(".filtres button").forEach(btn => {
+      btn.classList.remove("active")
+    })
+    e.target.classList.add("active");
 
-        // Filtrage des projets selon la catégorie sélectionnée
+    // Filtrage des projets selon la catégorie sélectionnée
 
-        if (categoryId === 0) {
-            displayworks(works); // Tous les projets
-        }
-        else {
-            let Fworks = works.filter(work => work.categoryId === categoryId);
-            displayworks(Fworks);
-        }
-
+    if (categoryId === 0) {
+      displayworks(works); // Tous les projets
     }
+    else {
+      let Fworks = works.filter(work => work.categoryId === categoryId);
+      displayworks(Fworks);
+    }
+
+  }
 })
 
 
@@ -106,28 +106,28 @@ document.querySelector(".filtres").addEventListener("click", (e) => {
 // On attend que le DOM soit complètement chargé avant d'exécuter le code
 document.addEventListener("DOMContentLoaded", () => {
 
-    // On récupère le token depuis le localStorage du navigateur
-    let token = localStorage.getItem("authToken");
+  // On récupère le token depuis le localStorage du navigateur
+  let token = localStorage.getItem("authToken");
 
-    // On sélectionne la barre d'édition, la modale et les filtres 
-    let editbar = document.querySelector(".editbar");
-    let edittitreIcon = document.querySelector(".edittitre a");
-    let SupFiltres = document.querySelector(".filtres");
-    let LogLink = document.querySelector('nav ul li a[href="login.html"]');    
+  // On sélectionne la barre d'édition, la modale et les filtres 
+  let editbar = document.querySelector(".editbar");
+  let edittitreIcon = document.querySelector(".edittitre a");
+  let SupFiltres = document.querySelector(".filtres");
+  let LogLink = document.querySelector('nav ul li a[href="login.html"]');
 
-    // Si le token existe => connexion admine
-    if (token) {
-        // Mode admin
-        editbar.style.display = "flex";        
-        edittitreIcon.style.display = "inline-block";        
-        SupFiltres.style.display = "none";
-        LogLink.textContent ="Logout";
-    } else {
-        // Mode visiteur
-        editbar.style.display = "none";
-        edittitreIcon.style.display = "none";
-        SupFiltres.style.display = "flex"
-    }
+  // Si le token existe => connexion admine
+  if (token) {
+    // Mode admin
+    editbar.style.display = "flex";
+    edittitreIcon.style.display = "inline-block";
+    SupFiltres.style.display = "none";
+    LogLink.textContent = "Logout";
+  } else {
+    // Mode visiteur
+    editbar.style.display = "none";
+    edittitreIcon.style.display = "none";
+    SupFiltres.style.display = "flex"
+  }
 });
 
 /*************************************************************
@@ -138,27 +138,27 @@ let btnFermer = document.querySelector(".fa-xmark")
 let modal = document.querySelector(".modale1");
 let edittitreIcon = document.querySelector(".edittitre a");
 
-edittitreIcon.addEventListener("click", () =>{
-    // au clique on affiche la modal 
-    modal.style.display = "flex";
-    
-    // on recupere les photos qui sont dans la page d'accueil
-    let ModalPhotos = "";
-    for(let work of works){
-        ModalPhotos +=`
+edittitreIcon.addEventListener("click", () => {
+  // au clique on affiche la modal 
+  modal.style.display = "flex";
+
+  // on recupere les photos qui sont dans la page d'accueil
+  let ModalPhotos = "";
+  for (let work of works) {
+    ModalPhotos += `
         <div class="photo_block" data-id="${work.id}">
 			<img src="${work.imageUrl}" alt="${work.title}">
 			<i class="fa-solid fa-trash-can"></i>
 		</div>`
-    }
+  }
 
-    // et on creer l'HTML et on l'affiche selon le style de la classe photos
-    document.querySelector(".Photos").innerHTML= ModalPhotos;
+  // et on creer l'HTML et on l'affiche selon le style de la classe photos
+  document.querySelector(".Photos").innerHTML = ModalPhotos;
 })
 
 // Fermeture de la modale
-btnFermer.addEventListener("click", () =>{
-    modal.style.display = "none";
+btnFermer.addEventListener("click", () => {
+  modal.style.display = "none";
 })
 
 
@@ -175,12 +175,12 @@ let BtnV = document.querySelector(".submit-btn");
 let BtnAjPhoto = document.querySelector(".btn_photo");
 // au clique ajouter photo on masque et on affiche certains elements
 BtnAjPhoto.addEventListener("click", () => {
-    Aphotos.style.display = "none"
-    AjModal.style.display = "block"
-    Flesh.style.visibility = "visible"
-    Titre1.style.display = "none"
-    BtnV.style.display = "block"
-    BtnAjPhoto.style.display = "none"
+  Aphotos.style.display = "none"
+  AjModal.style.display = "block"
+  Flesh.style.visibility = "visible"
+  Titre1.style.display = "none"
+  BtnV.style.display = "block"
+  BtnAjPhoto.style.display = "none"
 })
 
 
@@ -189,17 +189,17 @@ BtnAjPhoto.addEventListener("click", () => {
  *************************************************************/
 
 fetch("http://localhost:5678/api/categories")
-// // Lorsque la réponse est reçue, elle est transformée en JSON
-.then(reponse => reponse.json())
-.then(data => {
-   // On ajoute une <option> avec la valeur de l'id et le texte du nom
+  // // Lorsque la réponse est reçue, elle est transformée en JSON
+  .then(reponse => reponse.json())
+  .then(data => {
+    // On ajoute une <option> avec la valeur de l'id et le texte du nom
     let Ca = "";
-    for(let cat of data) {
-        Ca += `<option value="${cat.id}">${cat.name}</option>`;
+    for (let cat of data) {
+      Ca += `<option value="${cat.id}">${cat.name}</option>`;
     }
     // // et on insère toutes les balises <option> générées à la fin de son contenu
-    document.querySelector(".Cats").insertAdjacentHTML("beforeend",Ca);
-})
+    document.querySelector(".Cats").insertAdjacentHTML("beforeend", Ca);
+  })
 
 /*************************************************************
  * 10. Aperçu de l’image uploadée dans le formulaire
@@ -224,10 +224,10 @@ input.addEventListener("change", ({ target }) => {
   img.style.margin = "0 auto";
   img.style.top = "0"
   img.style.left = "39%"
-  lab.style.display ="none"
+  lab.style.display = "none"
   ic.style.display = "none"
   para.style.display = "none"
-  ajBox.style.padding = "0px"   
+  ajBox.style.padding = "0px"
   Sb.style.backgroundColor = "#1D6154" // Active le bouton
 
   ajBox.appendChild(img);
@@ -239,19 +239,19 @@ input.addEventListener("change", ({ target }) => {
  * 11. Gestion du retour en arrière depuis la modale ajout photo
  *************************************************************/
 
-let Rt = document.querySelector(".fa-arrow-left").addEventListener("click", () =>{
-    Aphotos.style.display = "grid"
-    AjModal.style.display = "none"
-    Flesh.style.visibility = "hidden"
-    Titre1.style.display = "block"
-    BtnV.style.display = "none"
-    BtnAjPhoto.style.display = "block"
-} )
-    
+let Rt = document.querySelector(".fa-arrow-left").addEventListener("click", () => {
+  Aphotos.style.display = "grid"
+  AjModal.style.display = "none"
+  Flesh.style.visibility = "hidden"
+  Titre1.style.display = "block"
+  BtnV.style.display = "none"
+  BtnAjPhoto.style.display = "block"
+})
+
 /*************************************************************
  * 12. Reset du formulaire de la modale
  *************************************************************/
- 
+
 function resetModalForm() {
   document.querySelector("#photo").value = "";
   document.querySelector('input[type="text"]').value = "";
@@ -291,13 +291,13 @@ function displayModalWorks(works) {
  *************************************************************/
 
 document.querySelector(".submit-btn").addEventListener("click", (e) => {
-    e.preventDefault();
+  e.preventDefault();
   let fiche = document.querySelector("#photo").files[0];
   let catego = document.querySelector(".Cats").value;
   let title = document.querySelector('input[type="text"]').value;
 
   // champs obligatoire image, tittre et categories  
-   if (!fiche) {
+  if (!fiche) {
     alert("Veuillez sélectionner une image.");
     return false;
   }
@@ -319,29 +319,29 @@ document.querySelector(".submit-btn").addEventListener("click", (e) => {
 
   fetch("http://localhost:5678/api/works", {
     method: "POST",
-    headers: {Authorization: `Bearer ${localStorage.getItem("authToken")}`},
+    headers: { Authorization: `Bearer ${localStorage.getItem("authToken")}` },
     body: formData
   })
-  .then(res => res.json())
-  .then(newWork => {
-    works.push(newWork);
-    displayworks(works);
-    displayModalWorks(works)
-    resetModalForm();
+    .then(res => res.json())
+    .then(newWork => {
+      works.push(newWork);
+      displayworks(works);
+      displayModalWorks(works)
+      resetModalForm();
 
-// Revenir à l’affichage photo    
-    
-Aphotos.style.display = "grid";
-AjModal.style.display = "none";
-Flesh.style.visibility = "hidden";
-Titre1.style.display = "block";
-BtnV.style.display = "none";
-BtnAjPhoto.style.display = "block";
+      // Revenir à l’affichage photo    
+
+      Aphotos.style.display = "grid";
+      AjModal.style.display = "none";
+      Flesh.style.visibility = "hidden";
+      Titre1.style.display = "block";
+      BtnV.style.display = "none";
+      BtnAjPhoto.style.display = "block";
 
 
-  
-  })
-  .catch(erreur => console.log(erreur))
+
+    })
+    .catch(erreur => console.log(erreur))
 
 });
 
@@ -360,21 +360,21 @@ document.querySelector(".Photos").addEventListener("click", (e) => {
         "Authorization": `Bearer ${localStorage.getItem("authToken")}`
       }
     })
-    .then(response => {
-      if (response.ok) {
-        // Met à jour la liste des travaux
-        works = works.filter(work => work.id !== workId);
+      .then(response => {
+        if (response.ok) {
+          // Met à jour la liste des travaux
+          works = works.filter(work => work.id !== workId);
 
-        // Met à jour la galerie principale
-        displayworks(works);
+          // Met à jour la galerie principale
+          displayworks(works);
 
-        // Supprime uniquement l'élément cliqué dans la modale 
-        photoBlock.remove();
-      } else {
-        console.error("Erreur lors de la suppression");
-      }
-    })
-    
+          // Supprime uniquement l'élément cliqué dans la modale 
+          photoBlock.remove();
+        } else {
+          console.error("Erreur lors de la suppression");
+        }
+      })
+
   }
 });
 
