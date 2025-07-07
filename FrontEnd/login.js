@@ -1,4 +1,7 @@
-// on attend le chargement de DOM 
+/*************************************************************
+ * 1. Écoute du chargement complet du DOM
+ *************************************************************/
+
 document.addEventListener("DOMContentLoaded", ()=>{
     // on selctionne le formulair
     let form=document.querySelector(".login-form");
@@ -9,7 +12,11 @@ document.addEventListener("DOMContentLoaded", ()=>{
         // on recupere l'email et le MDP
         let email = document.querySelector("#email").value;
         let password = document.querySelector("#password").value;
-        // on envoie la requete POST a l'API        
+        
+          /*********************************************************
+         * 2. Envoi des identifiants à l'API via une requête POST
+         *********************************************************/
+        
         fetch("http://localhost:5678/api/users/login", {
             method: "POST",  // POST pour envoie des données 
             headers: {
@@ -32,6 +39,11 @@ document.addEventListener("DOMContentLoaded", ()=>{
         .catch(error => console.log(error) );
     })
 })
+
+
+/*************************************************************
+ * 3. Déconnexion automatique si déjà connecté
+ *************************************************************/
 
  if (localStorage.getItem("authToken")) {
         localStorage.removeItem("authToken");
