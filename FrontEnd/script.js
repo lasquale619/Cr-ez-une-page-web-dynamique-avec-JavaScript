@@ -1,4 +1,6 @@
-// récupérer les projets
+/*************************************************************
+ * 1. Récupération et affichage des projets dans la galerie
+ *************************************************************/
 
 fetch("http://localhost:5678/api/works")
     .then(reponse => reponse.json())
@@ -20,7 +22,9 @@ fetch("http://localhost:5678/api/works")
     })
     .catch(erreur => console.log(erreur))
 
-// récupérer les Categories 
+/*************************************************************
+ * 2. Récupération des catégories et affichage des boutons
+ *************************************************************/
 
 fetch("http://localhost:5678/api/categories")
     .then(reponse => reponse.json())
@@ -36,7 +40,10 @@ fetch("http://localhost:5678/api/categories")
         document.querySelector(".filtres").insertAdjacentHTML("beforeend", categories);
     })
 
-// Construction de l'html
+/*************************************************************
+ * 3. Fonction pour afficher dynamiquement les projets
+ *************************************************************/
+
 function displayworks(works) {
     let figures = ""
     for (let figure of works) {
@@ -50,7 +57,10 @@ function displayworks(works) {
     document.querySelector(".gallery").innerHTML = figures
 }
 
-// je stock les travaux pour les réutilisé 
+/*************************************************************
+ * 4. Stockage global des travaux pour les filtres
+ *************************************************************/
+
 let works = [];
 fetch("http://localhost:5678/api/works")
     .then(reponse => reponse.json())
@@ -60,7 +70,10 @@ fetch("http://localhost:5678/api/works")
     })
     .catch(erreur => console.log(erreur));
 
-// Activation des boutons 
+
+/*************************************************************
+ * 5. Activation des boutons de filtre de catégories
+ *************************************************************/
 
 document.querySelector(".filtres").addEventListener("click", (e) => {
     if (e.target.tagName === "BUTTON") {
@@ -83,10 +96,10 @@ document.querySelector(".filtres").addEventListener("click", (e) => {
     }
 })
 
-/*************************************************************  */
-/*************************************************************  */
 
-// Modification apres login
+/*************************************************************
+ * 6. Affichage ou masquage des éléments selon l'état de connexion
+ *************************************************************/
 
 // On attend que le DOM soit complètement chargé avant d'exécuter le code
 document.addEventListener("DOMContentLoaded", () => {
@@ -114,6 +127,10 @@ document.addEventListener("DOMContentLoaded", () => {
         SupFiltres.style.display = "flex"
     }
 });
+
+/*************************************************************
+ * 7. Affichage de la modale des photos à l’édition
+ *************************************************************/
 
 let btnFermer = document.querySelector(".fa-xmark")
 let modal = document.querySelector(".modale1");
@@ -143,6 +160,11 @@ btnFermer.addEventListener("click", () =>{
     modal.style.display = "none";
 })
 
+
+/*************************************************************
+ * 8. Gestion du formulaire d'ajout de photos
+ *************************************************************/
+
 // on declare les elements dont on a besoin
 let AjModal = document.querySelector(".modal_Ajphotos")
 let Flesh = document.querySelector(".fa-arrow-left");
@@ -160,7 +182,11 @@ BtnAjPhoto.addEventListener("click", () => {
     BtnAjPhoto.style.display = "none"
 })
 
-// récupèrer la liste des catégories à partir de l'API
+
+/*************************************************************
+ * 9. Récupération dynamique des catégories dans le select
+ *************************************************************/
+
 fetch("http://localhost:5678/api/categories")
 // // Lorsque la réponse est reçue, elle est transformée en JSON
 .then(reponse => reponse.json())
@@ -173,6 +199,10 @@ fetch("http://localhost:5678/api/categories")
     // // et on insère toutes les balises <option> générées à la fin de son contenu
     document.querySelector(".Cats").insertAdjacentHTML("beforeend",Ca);
 })
+
+/*************************************************************
+ * 10. Aperçu de l’image uploadée dans le formulaire
+ *************************************************************/
 
 let Sb = document.querySelector(".submit-btn");
 let input = document.querySelector("#photo");
@@ -206,7 +236,10 @@ input.addEventListener("change", ({ target }) => {
 
 });
 
-// on gère la flèche pour revenir en arrière
+/*************************************************************
+ * 11. Gestion du retour en arrière depuis la modale ajout photo
+ *************************************************************/
+
 let Rt = document.querySelector(".fa-arrow-left").addEventListener("click", () =>{
     Aphotos.style.display = "grid"
     AjModal.style.display = "none"
@@ -216,8 +249,10 @@ let Rt = document.querySelector(".fa-arrow-left").addEventListener("click", () =
     BtnAjPhoto.style.display = "block"
 } )
     
-
-// fonction pour reset la modal apres l'ajout d'une photo 
+/*************************************************************
+ * 12. Reset du formulaire de la modale
+ *************************************************************/
+ 
 function resetModalForm() {
   document.querySelector("#photo").value = "";
   document.querySelector('input[type="text"]').value = "";
@@ -234,7 +269,11 @@ function resetModalForm() {
   document.querySelector(".submit-btn").style.backgroundColor = "#A7A7A7";
 }
 
-// fonction pour mettre a jour la modal photo
+
+/*************************************************************
+ * 13. Fonction pour mettre à jour les photos dans la modale
+ *************************************************************/
+
 function displayModalWorks(works) {
   let modalPhotos = "";
   for (let work of works) {
@@ -248,7 +287,9 @@ function displayModalWorks(works) {
   document.querySelector(".Photos").innerHTML = modalPhotos;
 }
 
-
+/*************************************************************
+ * 14. Soumission du formulaire d’ajout de photo
+ *************************************************************/
 
 document.querySelector(".submit-btn").addEventListener("click", (e) => {
     e.preventDefault();
@@ -303,7 +344,9 @@ BtnAjPhoto.style.display = "block";
 
 });
 
-
+/*************************************************************
+ * 15. Suppression d’un projet via l’icône corbeille
+ *************************************************************/
 
 document.querySelector(".Photos").addEventListener("click", (e) => {
   if (e.target.classList.contains("fa-trash-can")) {
